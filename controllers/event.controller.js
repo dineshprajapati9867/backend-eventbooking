@@ -1,7 +1,7 @@
 import bookingModel from "../models/booking.model.js";
 import Event from "../models/event.model.js";
 import reservationModel from "../models/reservation.model.js";
-
+import seatModel from "../models/seat.model.js";
 
 export const getEvents = async (req, res) => {
   try {
@@ -27,7 +27,6 @@ export const getEventById = async (req, res) => {
 
     if (!event) {
       return res.status(404).json({
-
         message: "Event not found",
       });
     }
@@ -42,31 +41,23 @@ export const getEventById = async (req, res) => {
   }
 };
 
-export const getEventSeats = async (
-  req,
-  res
-) => {
+export const getEventSeats = async (req, res) => {
   try {
     const { eventId } = req.params;
 
-    const reservation =
-      await reservationModel.findOne({
-        eventId,
-        userId: req.user.userId,
-        expiresAt: {
-          $gt: new Date(),
-        },
-      });
+    const reservation = await reservationModel.findOne({
+      eventId,
+      userId: req.user.userId,
+      expiresAt: {
+        $gt: new Date(),
+      },
+    });
 
-    const bookings =
-      await bookingModel.find({
-        eventId,
-      });
+    const bookings = await bookingModel.find({
+      eventId,
+    });
 
-    const bookedSeats =
-      bookings.flatMap(
-        (booking) => booking.seatNumbers
-      );
+    const bookedSeats = bookings.flatMap((booking) => booking.seatNumbers);
 
     res.json({
       reservation,
