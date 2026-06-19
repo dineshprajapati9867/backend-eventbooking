@@ -21,7 +21,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: 
-      "https://your-frontend.onrender.com",
+      "https://frontend-evenbooking.onrender.com/",
     credentials: true,
   })
 );
